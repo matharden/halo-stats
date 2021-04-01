@@ -4,7 +4,11 @@ html {
   background: #0f2027;  /* fallback for old browsers */
   /* background: -webkit-linear-gradient(to left, #0f2027, #203a43, #2c5364);  /* Chrome 10-25, Safari 5.1-6 * / */
   background: linear-gradient(to right, #2c5364, #203a43 20%, #0f2027 80%); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-  font-family: verdana;
+}
+
+* {
+  font-family: 'Baksheesh Regular', monospace;
+  user-select: none;
 }
 
 hr {
@@ -18,19 +22,19 @@ hr {
   background: #071414;
   border: 0;
   color: #fff;
-  font-family: 'Baksheesh Regular', monospace;
   margin-right: 8px;
   outline: 0;
   padding: 8px;
   text-shadow: 0 0 5px rgba(255, 255, 255, 0.6);
+  text-transform: uppercase;
 }
 
 button,
 input[type=submit] {
   border: 0;
   border-radius: 4px;
-  font-family: 'Baksheesh Regular', monospace;
   padding: 4px;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
 }
 
 .match {
@@ -42,7 +46,6 @@ input[type=submit] {
 .summary dt,
 .summary dd {
   display: inline;
-  font-family: 'Baksheesh Regular', monospace;
   margin: 0;
   text-transform: uppercase;
 }
@@ -70,9 +73,8 @@ input[type=submit] {
 
 .table td,
 .table th {
-  padding: 0 4px;
-  font-family: 'Baksheesh Regular', monospace;
-  font-size: 0.75rem;
+  /* padding: 0 4px; */
+  font-size: 14px;
 }
 
 .table tbody th,
@@ -83,12 +85,13 @@ input[type=submit] {
 .table thead th {
   background: #071414;
   color: rgba(255, 255, 255, 0.5);
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 300;
+  padding: 2px 4px;
 }
 
-.table thead th,
-.table tbody td {
+.table thead th:nth-child(1n+2),
+.table tbody td:nth-child(1n+2) {
   text-align: center;
 }
 
@@ -108,12 +111,16 @@ input[type=submit] {
 .rowEven:first-child th,
 .rowOdd + .rowEven th,
 .rowEven + .rowOdd th {
-  padding-top: 6px;
+  padding: 4px 4px 0;
 }
 
 .rowOdd + .rowOdd td,
 .rowEven + .rowEven td {
   padding-bottom: 4px;
+}
+
+.table tbody td {
+  padding: 6px 4px 4px;
 }
 
 /* .rowOdd {
@@ -136,28 +143,26 @@ input[type=submit] {
   color: #fff;
 }
 
-/* .blueTeam .colDark {
-  background: #0c1c29;
-} */
+.colDark {
+  background: rgba(0, 0, 0, 0.15) !important;
+}
+
+.colDarker {
+  background: rgba(0, 0, 0, 0.25) !important;
+}
 
 /* blue 2 darlk #0c1c29 */
 
-.table .currentGamer.redTeam th,
-.table .currentGamer.redTeam td {
-  background: #63221f;
-  font-weight: 700;
+.currentGamer {
+  font-weight: 700 !important;
 }
 
-.currentGamer.redTeam th,
-.currentGamer.redTeam td {
+.currentGamer.redTeam {
   background: #63221f;
-  font-weight: 700;
 }
 
-.currentGamer.blueTeam th,
-.currentGamer.blueTeam td {
+.currentGamer.blueTeam {
   background: #1c3754;
-  font-weight: 700;
 }
 
 .table .dnf th,
@@ -174,4 +179,10 @@ input[type=submit] {
 
 .awardCount {
   margin-left: 4px;
+}
+
+.more {
+  display: flex;
+  margin: 1rem;
+  justify-content: center;
 }
