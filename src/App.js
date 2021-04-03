@@ -108,6 +108,10 @@ function App() {
               {/* <div>Map: {maps[game.MapId]}</div> */}
               <dl className={styles.summary} onClick={() => toggleMatch(game.Id.MatchId)}>
                 <div>
+                  <dt>#</dt>
+                  <dd>{key + 1}</dd>
+                </div>
+                <div>
                   <dt>Date</dt>
                   <dd>{displayDate(game.MatchCompletedDate.ISO8601Date)}</dd>
                 </div>
@@ -160,7 +164,7 @@ const MatchResult = ({ result }) => {
       <thead>
         <tr>
           {/* <th>Spartan</th> */}
-          <th>S</th>
+          <th>Spartan/Score</th>
           <th>K</th>
           <th>D</th>
           <th>A</th>
@@ -201,7 +205,9 @@ const MatchResult = ({ result }) => {
               <td>{player.PlayerScore}</td>
               <td>{player.TotalKills}</td>
               <td>{player.TotalDeaths}</td>
-              <td>{player.TotalAssists}</td>
+              <td className={cn({
+                [styles.best]: _.maxBy(result.PlayerStats, 'TotalAssists').Player.Gamertag.toLowerCase() === player.Player.Gamertag.toLowerCase(),
+              })}>{player.TotalAssists}</td>
               <td className={styles.colDark}>{calcKda(player)}</td>
               <td className={styles.colDark}>{parseFloat(player.TotalShotsLanded / player.TotalShotsFired * 100).toFixed(1)}</td>
               <td className={styles.colDark}>{parseInt(player.TotalMeleeDamage + player.TotalShoulderBashDamage + player.TotalWeaponDamage)}</td>
