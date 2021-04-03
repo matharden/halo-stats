@@ -104,7 +104,7 @@ function App() {
       {!!games.length && <>
         <ol className={styles.match}>
           {games.map((game, key) => (
-            <li key={key}>
+            <li key={game.Id.MatchId}>
               {/* <div>Map: {maps[game.MapId]}</div> */}
               <dl className={styles.summary} onClick={() => toggleMatch(game.Id.MatchId)}>
                 <div>
