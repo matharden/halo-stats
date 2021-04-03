@@ -152,6 +152,26 @@ const MatchResult = ({ result }) => {
     return Math.round(num * 10) / 10;
   };
 
+  const calcAccuracy = p => (
+    parseFloat(p.TotalShotsLanded / p.TotalShotsFired * 100).toFixed(1)
+  );
+
+  const calcDamage = p => (
+    parseInt(p.TotalMeleeDamage + p.TotalShoulderBashDamage + p.TotalWeaponDamage)
+  );
+
+  const calcPerfectKills = p => (
+    getMedalCount(p.MedalAwards, 'Perfect Kill')
+  );
+
+  const isBestAssists = (playerStats, p) => (
+    _.maxBy(playerStats, 'TotalAssists').Player.Gamertag.toLowerCase() === p.Player.Gamertag.toLowerCase()
+  );
+
+  const isCurrentGamer = p => (
+    p.Player.Gamertag.toLowerCase() === gamertag.toLowerCase()
+  )
+
   const toggleMore = id => (
     setMore(more => more.includes(id)
         ? more.filter(i => i !== id) // remove id
@@ -184,8 +204,7 @@ const MatchResult = ({ result }) => {
               [styles.dnf]: player.DNF,
               [styles.redTeam]: player.TeamId === 0,
               [styles.blueTeam]: player.TeamId === 1,
-              [styles.currentGamer]:
-                  player.Player.Gamertag.toLowerCase() === gamertag.toLowerCase(),
+              [styles.currentGamer]: isCurrentGamer(player),
             })}>
               <th colSpan="4" onClick={() => toggleMore(i)}>
                 {player.Player.Gamertag}
@@ -198,21 +217,20 @@ const MatchResult = ({ result }) => {
               [styles.dnf]: player.DNF,
               [styles.redTeam]: player.TeamId === 0,
               [styles.blueTeam]: player.TeamId === 1,
-              [styles.currentGamer]:
-                  player.Player.Gamertag.toLowerCase() === gamertag.toLowerCase(),
+              [styles.currentGamer]: isCurrentGamer(player),
                 })}>
               {/* <td>{player.Player.Gamertag}</td> */}
               <td>{player.PlayerScore}</td>
               <td>{player.TotalKills}</td>
               <td>{player.TotalDeaths}</td>
               <td className={cn({
-                [styles.best]: _.maxBy(result.PlayerStats, 'TotalAssists').Player.Gamertag.toLowerCase() === player.Player.Gamertag.toLowerCase(),
+                [styles.best]: isBestAssists(result.PlayerStats, player),
               })}>{player.TotalAssists}</td>
               <td className={styles.colDark}>{calcKda(player)}</td>
-              <td className={styles.colDark}>{parseFloat(player.TotalShotsLanded / player.TotalShotsFired * 100).toFixed(1)}</td>
-              <td className={styles.colDark}>{parseInt(player.TotalMeleeDamage + player.TotalShoulderBashDamage + player.TotalWeaponDamage)}</td>
+              <td className={styles.colDark}>{calcAccuracy(player)}</td>
+              <td className={styles.colDark}>{calcDamage(player)}</td>
               <td className={styles.colDarker}>{player.TotalHeadshots}</td>
-              <td className={styles.colDarker}>{getMedalCount(player.MedalAwards, 'Perfect Kill')}</td>
+              <td className={styles.colDarker}>{calcPerfectKills(player)}</td>
               <td className={styles.colDarker}>{player.TotalGrenadeKills}</td>
               <td className={styles.colDarker}>{parseInt(player.TotalGrenadeDamage)}</td>
             </tr>
@@ -221,8 +239,7 @@ const MatchResult = ({ result }) => {
               [styles.dnf]: player.DNF,
               [styles.redTeam]: player.TeamId === 0,
               [styles.blueTeam]: player.TeamId === 1,
-              [styles.currentGamer]:
-                  player.Player.Gamertag.toLowerCase() === gamertag.toLowerCase(),
+              [styles.currentGamer]: isCurrentGamer(player),
                 })}>
               <td colSpan="11" className={styles.colDark}>
                 {player.MedalAwards.map((medal, key) => (
