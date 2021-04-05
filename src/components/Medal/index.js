@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { getMedalById } from '../../lookups';
+import { getMedalById } from 'lookups';
 import styles from './Medal.module.css';
 
 

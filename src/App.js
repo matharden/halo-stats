@@ -4,8 +4,8 @@ import { format } from 'date-fns'
 import _ from 'lodash';
 import cn from 'classnames';
 
-import Medal from './components/Medal';
-import { getMedalCount } from './lookups';
+import Medal from 'components/Medal';
+import { getMedalCount } from 'lookups';
 // import maps from './maps'
 import styles from './App.module.css';
 
