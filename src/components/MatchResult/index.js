@@ -26,6 +26,16 @@ const MatchResult = ({ result }) => {
     parseInt(p.TotalMeleeDamage + p.TotalShoulderBashDamage + p.TotalWeaponDamage)
   );
 
+  const calcTotalDamage = p => (
+    parseInt(
+      p.TotalGrenadeDamage +
+      p.TotalGroundPoundDamage +
+      p.TotalMeleeDamage +
+      p.TotalShoulderBashDamage +
+      p.TotalWeaponDamage
+    )
+  );
+
   const calcPerfectKills = p => (
     getMedalCount(p.MedalAwards, 'Perfect Kill')
   );
@@ -50,7 +60,7 @@ const MatchResult = ({ result }) => {
       <thead>
         <tr>
           {/* <th>Spartan</th> */}
-          <th>Spartan/Score</th>
+          <th>Score</th>
           <th>K</th>
           <th>D</th>
           <th>A</th>
@@ -61,6 +71,7 @@ const MatchResult = ({ result }) => {
           <th title="Perfect Kills">⭐️</th>
           <th title="Grenade Kills">🍍</th>
           <th title="Grenade Damage">🍍Dam</th>
+          <th title="Total Damage">TDam</th>
         </tr>
       </thead>
       <tbody>
@@ -76,7 +87,7 @@ const MatchResult = ({ result }) => {
                 {player.Player.Gamertag}
               </th>
               <th colSpan="3" className={styles.colDark} />
-              <th colSpan="4" className={styles.colDarker} />
+              <th colSpan="5" className={styles.colDarker} />
             </tr>
             <tr onClick={() => toggleMore(i)}
                 className={cn(i % 2 === 0 ? styles.rowEven : styles.rowOdd, {
@@ -99,6 +110,7 @@ const MatchResult = ({ result }) => {
               <td className={styles.colDarker}>{calcPerfectKills(player)}</td>
               <td className={styles.colDarker}>{player.TotalGrenadeKills}</td>
               <td className={styles.colDarker}>{parseInt(player.TotalGrenadeDamage)}</td>
+              <td className={styles.colDarker}>{calcTotalDamage(player)}</td>
             </tr>
             {more.includes(i) && <tr className={cn(
               i % 2 === 0 ? styles.rowEven : styles.rowOdd, {
@@ -107,7 +119,7 @@ const MatchResult = ({ result }) => {
               [styles.blueTeam]: player.TeamId === 1,
               [styles.currentGamer]: isCurrentGamer(player),
                 })}>
-              <td colSpan="11" className={styles.colDark}>
+              <td colSpan="12" className={styles.colDark}>
                 {player.MedalAwards.map((medal, key) => (
                   <span key={key} className={styles.award}>
                     <Medal id={medal.MedalId}
