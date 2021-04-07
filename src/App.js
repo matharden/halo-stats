@@ -93,9 +93,7 @@ function App() {
             value={gamertag}
             onChange={e => setGamertag(e.target.value)}
           />
-          <input type="submit" value="Enter"
-            onSubmit={() => setPlayer(gamertag)}
-          />
+          <input type="submit" value="Enter" />
         </form>
       </div>}
       {player && !games.length && <p>No matches found.</p>}
