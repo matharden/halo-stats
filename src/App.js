@@ -27,12 +27,15 @@ function App() {
   const [page, setPage] = useState(0);
   const [player, setPlayer] = useState(qG);
   const [gamertag, setGamertag] = useState();
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     async function fetchData() {
       const gamesSet = await playerMatchHistory(player, page);
       setGames(games => games.concat(gamesSet));
+      setLoading(false);
     }
+    setLoading(true);
     player && fetchData();
   }, [page, player]);
 
@@ -96,7 +99,13 @@ function App() {
           <input type="submit" value="Enter" />
         </form>
       </div>}
-      {player && !games.length && <p>No matches found.</p>}
+      {player && <div className={styles.loading} style={{
+        backgroundImage: `url('/media/halo-loading.gif')`,
+        opacity: loading ? 1 : 0,
+        ...(loading && { transform: 'scale3d(1.1, 1.1, 1)' }),
+        ...(!loading && { top: `100vh`, left: `100vw` }),
+      }}/>}
+      {player && !loading && !games.length && <p>No matches found.</p>}
       {!!games.length && <>
         <ol className={styles.match}>
           {games.map((game, key) => (
