@@ -1,17 +1,16 @@
 import React, { useState } from 'react';
 import cn from 'classnames';
 import _ from 'lodash';
+import { useParams } from 'react-router-dom';
 
 import Medal from 'components/Medal';
 import { getMedalCount } from 'lookups';
 import styles from './MatchResult.module.css';
 
 
-const qG = new URLSearchParams(window.location.search).get('g') || '';
-
 const MatchResult = ({ result }) => {
   const [more, setMore] = useState([]);
-  const [gamertag] = useState(qG);
+  const { player: gamertag } = useParams();
 
   const calcKda = p => {
     const num = p.TotalKills - p.TotalDeaths + p.TotalAssists / 3;

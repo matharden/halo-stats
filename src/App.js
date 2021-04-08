@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { matchResult, playerMatchHistory } from './api';
 import { format } from 'date-fns'
 import _ from 'lodash';
+import { useHistory, useParams } from 'react-router-dom';
+import cn from 'classnames';
 
 import MatchResult from 'components/MatchResult';
 // import maps from './maps'
@@ -20,14 +22,14 @@ const displayDate = date => {
 //   return fetchData().then(response => response);
 // };
 
-const qG = new URLSearchParams(window.location.search).get('g') || '';
 
 function App() {
   const [games, setGames] = useState([]);
   const [page, setPage] = useState(0);
-  const [player, setPlayer] = useState(qG);
-  const [gamertag, setGamertag] = useState();
+  const { player } = useParams();
+  const [gamertag, setGamertag] = useState('');
   const [loading, setLoading] = useState(false);
+  const history = useHistory();
 
   useEffect(() => {
     async function fetchData() {
@@ -82,12 +84,19 @@ function App() {
     }
   };
 
+  const submit = (event) => {
+    event.preventDefault();
+    history.push({
+      pathname: `${gamertag}`,
+    });
+  };
+
   const winner = game => _.find(game.Teams, {'Rank': 1});
 
   return (
     <div className="App">
       {!player && <div>
-        <form action="/">
+        <form action="/" onSubmit={e => submit(e)}>
           <input
             type="text"
             name="g"
