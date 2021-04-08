@@ -81,13 +81,24 @@ input[type=submit] {
 
 .loading {
   position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
+  top: 100vh;
   right: 0;
+  bottom: 0;
+  left: 100vw;
   background: no-repeat;
   background-size: cover;
   background-position: center;
-  transition: opacity 200ms, transform 200ms, top 0 200ms, left 0 200ms;
+  opacity: 0;
+  transition: opacity 700ms, transform 400ms, top 0s 700ms, left 0s 700ms;
   transform: scale3d(1.15, 1.15, 1);
+}
+
+.loading--on {
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  opacity: 1;
+  transform: scale3d(1.1, 1.1, 1);;
+  transition: opacity 700ms, transform 400ms, top 0s, left 0s;
 }

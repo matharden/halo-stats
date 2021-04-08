@@ -99,12 +99,14 @@ function App() {
           <input type="submit" value="Enter" />
         </form>
       </div>}
-      {player && <div className={styles.loading} style={{
-        backgroundImage: `url('/media/halo-loading.gif')`,
-        opacity: loading ? 1 : 0,
-        ...(loading && { transform: 'scale3d(1.1, 1.1, 1)' }),
-        ...(!loading && { top: `100vh`, left: `100vw` }),
-      }}/>}
+      {player && <div
+        className={cn(styles.loading, {
+          [styles[`loading--on`]]: loading,
+        })}
+        style={{
+          backgroundImage: `url('/media/halo-loading.gif')`,
+        }}
+      />}
       {player && !loading && !games.length && <p>No matches found.</p>}
       {!!games.length && <>
         <ol className={styles.match}>
