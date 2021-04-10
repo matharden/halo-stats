@@ -5,6 +5,7 @@ import _ from 'lodash';
 import { useHistory, useParams } from 'react-router-dom';
 import cn from 'classnames';
 
+import Chevron from 'components/Chevron';
 import MatchResult from 'components/MatchResult';
 // import maps from './maps'
 import styles from './App.module.css';
@@ -122,7 +123,8 @@ function App() {
           {games.map((game, key) => (
             <li key={game.Id.MatchId}>
               {/* <div>Map: {maps[game.MapId]}</div> */}
-              <dl className={styles.summary} onClick={() => toggleMatch(game.Id.MatchId)}>
+              <div className={styles.summary} onClick={() => toggleMatch(game.Id.MatchId)}>
+              <dl>
                 <div>
                   <dt>#</dt>
                   <dd>{key + 1}</dd>
@@ -144,6 +146,12 @@ function App() {
                   <dd>{getGameVariant(game.GameVariant.ResourceId)?.name}</dd>
                 </div> */}
               </dl>
+              <Chevron
+                down={game.showResult}
+                bright={!_.isEmpty(game.result)}
+                spin={game.showResult && _.isEmpty(game.result)}
+              />
+              </div>
               {game.showResult && <MatchResult result={game.result} />}
               <hr />
             </li>

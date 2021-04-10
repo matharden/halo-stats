@@ -45,8 +45,9 @@ input[type=submit] {
 }
 
 .summary {
+  align-items: center;
   cursor: pointer;
-  margin: 0;
+  display: flex;
   padding: 1rem 0;
   user-select: none;
 }
@@ -58,7 +59,11 @@ input[type=submit] {
   text-transform: uppercase;
 }
 
-.summary > div {
+.summary dl {
+  margin: 0;
+}
+
+.summary dl > div {
   display: inline-block;
 }
 
