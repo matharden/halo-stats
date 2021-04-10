@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import cn from 'classnames';
-import _ from 'lodash';
+import { maxBy, sortBy } from 'lodash';
 import { useParams } from 'react-router-dom';
 
 import Medal from 'components/Medal';
@@ -40,7 +40,7 @@ const MatchResult = ({ result }) => {
   );
 
   const isBestAssists = (playerStats, p) => (
-    _.maxBy(playerStats, 'TotalAssists').Player.Gamertag.toLowerCase() === p.Player.Gamertag.toLowerCase()
+    maxBy(playerStats, 'TotalAssists').Player.Gamertag.toLowerCase() === p.Player.Gamertag.toLowerCase()
   );
 
   const isCurrentGamer = p => (
@@ -74,7 +74,7 @@ const MatchResult = ({ result }) => {
         </tr>
       </thead>
       <tbody>
-        {_.sortBy(result.PlayerStats, 'Rank').map((player, i) => (
+        {sortBy(result.PlayerStats, 'Rank').map((player, i) => (
           <React.Fragment key={i}>
             <tr className={cn(i % 2 === 0 ? styles.rowEven : styles.rowOdd, {
               [styles.dnf]: player.DNF,

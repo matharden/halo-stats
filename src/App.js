@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { matchResult, playerMatchHistory } from './api';
 import { format } from 'date-fns'
-import _ from 'lodash';
+import { find, isEmpty, sortBy } from 'lodash';
 import { useHistory, useParams } from 'react-router-dom';
 import cn from 'classnames';
 
@@ -73,7 +73,7 @@ function App() {
       }));
     };
     // Check.
-    const mygame = _.find(games, {'Id':{'MatchId':id}});
+    const mygame = find(games, {'Id':{'MatchId':id}});
     if (mygame.showResult) {
       flipResult(false);
     } else {
@@ -92,7 +92,7 @@ function App() {
     });
   };
 
-  const winner = game => _.find(game.Teams, {'Rank': 1});
+  const winner = game => find(game.Teams, {'Rank': 1});
 
   return (
     <div className="App">
@@ -139,7 +139,7 @@ function App() {
                 </div>
                 <div>
                   <dt>Score</dt>
-                  <dd>{_.sortBy(game.Teams, 'Rank').map(team => team.Score).join(' - ')}</dd>
+                  <dd>{sortBy(game.Teams, 'Rank').map(team => team.Score).join(' - ')}</dd>
                 </div>
                 {/* <div>
                   <dt>Game</dt>
@@ -148,8 +148,8 @@ function App() {
               </dl>
               <Chevron
                 down={game.showResult}
-                bright={!_.isEmpty(game.result)}
-                spin={game.showResult && _.isEmpty(game.result)}
+                bright={!isEmpty(game.result)}
+                spin={game.showResult && isEmpty(game.result)}
               />
               </div>
               {game.showResult && <MatchResult result={game.result} />}
