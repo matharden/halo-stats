@@ -17,7 +17,6 @@ export const playerMatchHistory = (player, page, count=10) => {
     }
   };
   return fetch(url, headers).then(response => response.json()).then(data => {
-    console.log(data);
     return data.Results;
   });
 };
@@ -29,10 +28,9 @@ export const matchResult = matchId => {
       "Ocp-Apim-Subscription-Key": primary_key,
     }
   };
-  return fetch(url, headers).then(response => response.json()).then(data => {
-    console.log(data);
-    return data;
-  });
+  return fetch(url, headers)
+    .then(response => response.json())
+    .then(data => data);
 };
 
 // CORS error on this.
