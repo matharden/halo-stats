@@ -86,8 +86,9 @@
 
 /* blue 2 darlk #0c1c29 */
 
-.currentGamer {
-  font-weight: 700 !important;
+tbody .currentGamer th,
+tbody .currentGamer td {
+  font-weight: 700;
 }
 
 .currentGamer.redTeam {
