@@ -114,3 +114,7 @@ tbody .currentGamer td {
 .awardCount {
   margin-left: 4px;
 }
+
+.title {
+  text-transform: capitalize;
+}

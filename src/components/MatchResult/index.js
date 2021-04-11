@@ -4,7 +4,7 @@ import { maxBy, sortBy } from 'lodash';
 import { useParams } from 'react-router-dom';
 
 import Medal from 'components/Medal';
-import { getMedalCount } from 'lookups';
+import { getMedalCount, getWeaponById } from 'lookups';
 import styles from './MatchResult.module.css';
 
 
@@ -17,9 +17,10 @@ const MatchResult = ({ result }) => {
     return Math.round(num * 10) / 10;
   };
 
-  const calcAccuracy = p => (
-    parseFloat(p.TotalShotsLanded / p.TotalShotsFired * 100).toFixed(1)
-  );
+  const calcAccuracy = i => {
+    const a = parseFloat(i.TotalShotsLanded / i.TotalShotsFired * 100).toFixed(1);
+    return isNaN(a) ? 'n/a' : a;
+  };
 
   const calcDamage = p => (
     parseInt(p.TotalMeleeDamage + p.TotalShoulderBashDamage + p.TotalWeaponDamage)
@@ -45,7 +46,7 @@ const MatchResult = ({ result }) => {
 
   const isCurrentGamer = p => (
     p.Player.Gamertag.toLowerCase() === gamertag.toLowerCase()
-  )
+  );
 
   const toggleMore = id => (
     setMore(more => more.includes(id)
@@ -119,7 +120,39 @@ const MatchResult = ({ result }) => {
                   </span>
                 ))}
               </td>
-            </tr>}
+            </tr><tr className={rowStyles(player, i)}>
+              <td colSpan="12" className={styles.colDark}>
+                <table className={styles.table}>
+                  <thead>
+                    <tr>
+                      <th></th>
+                      <th>Damage</th>
+                      <th>Kill</th>
+                      <th>Headshots</th>
+                      <th>Accuracy</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {sortBy(player.WeaponStats, 'TotalDamageDealt').reverse().map(stats => {
+                      const weapon = getWeaponById(stats.WeaponId.StockId);
+                      if (weapon && stats.TotalDamageDealt) {
+                        return (
+                          <tr key={stats.WeaponId.StockId}>
+                            <td className={styles.title}>{weapon.name.toLowerCase()}</td>
+                            <td>{parseInt(stats.TotalDamageDealt)}</td>
+                            <td>{stats.TotalKills}</td>
+                            <td>{stats.TotalHeadshots}</td>
+                            <td>{calcAccuracy(stats)}</td>
+                          </tr>
+                        )
+                      } else {
+                        return null;
+                      }
+                    })}
+                  </tbody>
+                </table>
+              </td>
+            </tr></>}
           </React.Fragment>
         ))}
       </tbody>
