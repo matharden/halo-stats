@@ -69,6 +69,9 @@ input[type=submit] {
 
 .summary dt {
   color: rgba(255, 255, 255, 0.5);
+}
+
+.summary dl > div:nth-child(1n+2) dt {
   margin-right: 1ch;
 }
 
