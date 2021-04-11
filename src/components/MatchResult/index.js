@@ -90,8 +90,8 @@ const MatchResult = ({ result }) => {
               <th colSpan="4" onClick={() => toggleMore(i)}>
                 {player.Player.Gamertag}
               </th>
-              <th colSpan="3" className={styles.colDark} />
-              <th colSpan="5" className={styles.colDarker} />
+              <th colSpan="3" className={styles.colDark} onClick={() => toggleMore(i)} />
+              <th colSpan="5" className={styles.colDarker} onClick={() => toggleMore(i)} />
             </tr>
             <tr onClick={() => toggleMore(i)} className={rowStyles(player, i)}>
               {/* <td>{player.Player.Gamertag}</td> */}
