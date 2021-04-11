@@ -54,6 +54,15 @@ const MatchResult = ({ result }) => {
     )
   );
 
+  const rowStyles = (player, row) => {
+    return cn(row % 2 === 0 ? styles.rowEven : styles.rowOdd, {
+      [styles.dnf]: player.DNF,
+      [styles.redTeam]: player.TeamId === 0,
+      [styles.blueTeam]: player.TeamId === 1,
+      [styles.currentGamer]: isCurrentGamer(player),
+    });
+  };
+
   return (
     <table className={styles.table}>
       <thead>
@@ -76,25 +85,14 @@ const MatchResult = ({ result }) => {
       <tbody>
         {sortBy(result.PlayerStats, 'Rank').map((player, i) => (
           <React.Fragment key={i}>
-            <tr className={cn(i % 2 === 0 ? styles.rowEven : styles.rowOdd, {
-              [styles.dnf]: player.DNF,
-              [styles.redTeam]: player.TeamId === 0,
-              [styles.blueTeam]: player.TeamId === 1,
-              [styles.currentGamer]: isCurrentGamer(player),
-            })}>
+            <tr className={rowStyles(player, i)}>
               <th colSpan="4" onClick={() => toggleMore(i)}>
                 {player.Player.Gamertag}
               </th>
               <th colSpan="3" className={styles.colDark} />
               <th colSpan="5" className={styles.colDarker} />
             </tr>
-            <tr onClick={() => toggleMore(i)}
-                className={cn(i % 2 === 0 ? styles.rowEven : styles.rowOdd, {
-              [styles.dnf]: player.DNF,
-              [styles.redTeam]: player.TeamId === 0,
-              [styles.blueTeam]: player.TeamId === 1,
-              [styles.currentGamer]: isCurrentGamer(player),
-                })}>
+            <tr onClick={() => toggleMore(i)} className={rowStyles(player, i)}>
               {/* <td>{player.Player.Gamertag}</td> */}
               <td>{player.PlayerScore}</td>
               <td>{player.TotalKills}</td>
@@ -111,13 +109,7 @@ const MatchResult = ({ result }) => {
               <td className={styles.colDarker}>{parseInt(player.TotalGrenadeDamage)}</td>
               <td className={styles.colDarker}>{calcTotalDamage(player)}</td>
             </tr>
-            {more.includes(i) && <tr className={cn(
-              i % 2 === 0 ? styles.rowEven : styles.rowOdd, {
-              [styles.dnf]: player.DNF,
-              [styles.redTeam]: player.TeamId === 0,
-              [styles.blueTeam]: player.TeamId === 1,
-              [styles.currentGamer]: isCurrentGamer(player),
-                })}>
+            {more.includes(i) && <><tr className={rowStyles(player, i)}>
               <td colSpan="12" className={styles.colDark}>
                 {player.MedalAwards.map((medal, key) => (
                   <span key={key} className={styles.award}>
