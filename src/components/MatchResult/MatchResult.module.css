@@ -41,7 +41,7 @@
   border-top: 2px solid #0f2027;
 }
 
-.rowEven:first-child th,
+.rowOdd:first-child th,
 .rowOdd + .rowEven th,
 .rowEven + .rowOdd th {
   padding: 4px 4px 0;

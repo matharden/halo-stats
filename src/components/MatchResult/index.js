@@ -55,7 +55,7 @@ const MatchResult = ({ result }) => {
   );
 
   const rowStyles = (player, row) => {
-    return cn(row % 2 === 0 ? styles.rowEven : styles.rowOdd, {
+    return cn(row % 2 === 0 ? styles.rowOdd : styles.rowEven, {
       [styles.dnf]: player.DNF,
       [styles.redTeam]: player.TeamId === 0,
       [styles.blueTeam]: player.TeamId === 1,
