@@ -1,6 +1,7 @@
 import { filter, find } from 'lodash';
 import medals from './metadata/medals';
 import variants from './metadata/gamevariants';
+import weapons from './metadata/weapons';
 
 
 export const getGameVariant = id => find(variants, {id});
@@ -8,6 +9,8 @@ export const getGameVariant = id => find(variants, {id});
 export const getMedalByName = name => find(medals, {name});
 
 export const getMedalById = id => find(medals, {'id': `${id}`});
+
+export const getWeaponById = id => find(weapons, {'id': `${id}`});
 
 export const getMedalCount = (awards, name) => {
   const possibleMedals = filter(medals, {name});
