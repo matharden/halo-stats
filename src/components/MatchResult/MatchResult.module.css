@@ -54,6 +54,7 @@
 
 .table tbody td {
   padding: 6px 4px 4px;
+  position: relative;
 }
 
 /* .rowOdd {
@@ -117,4 +118,10 @@ tbody .currentGamer td {
 
 .title {
   text-transform: capitalize;
+}
+
+.best {
+  position: absolute;
+  right: 0;
+  top: 0;
 }

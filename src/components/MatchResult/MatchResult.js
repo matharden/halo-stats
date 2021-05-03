@@ -1,16 +1,59 @@
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import cn from 'classnames';
-import { maxBy, sortBy } from 'lodash';
+import { filter, maxBy, minBy, sortBy } from 'lodash';
 import { useParams } from 'react-router-dom';
 
 import Medal from 'components/Medal';
+import Triangle from 'components/Triangle';
 import { getMedalCount, getWeaponById } from 'lookups';
 import styles from './MatchResult.module.css';
 
 
+// Set the best unique score for each attribute.
+const attributes = [
+  'PlayerScore',
+  'TotalAssists',
+  // 'TotalDamageDealt',
+  'TotalDeaths',
+  'TotalGrenadeDamage',
+  'TotalGrenadeKills',
+  'TotalHeadshots',
+  'TotalKills',
+];
+const bestIsLow = ['TotalDeaths'];
+
 const MatchResult = ({ result }) => {
   const [more, setMore] = useState([]);
+  const [best, setBest] = useState({});
   const { player: gamertag } = useParams();
+
+  const setBestAttributes = useCallback((result) => {
+    // Get best score of each attribute.
+    // Only add to the object if there is a single best score.
+    setBest(attributes.reduce((scores, attr) => {
+      let best;
+      if (bestIsLow.includes(attr)) {
+        best = minBy(result.PlayerStats, attr)[attr];
+      } else {
+        best = maxBy(result.PlayerStats, attr)[attr];
+      }
+      // Find any players which match the best result.
+      const count = filter(result.PlayerStats, {[attr]: best}).length;
+      // Only set best unique player.
+      if (count === 1) {
+        return {
+          ...scores,
+          [attr]: best,
+        };
+      } else {
+        return scores;
+      }
+    }, {}));
+  }, []);
+
+  useEffect(() => {
+    setBestAttributes(result);
+  }, [result, setBestAttributes]);
 
   const calcKda = p => {
     const num = p.TotalKills - p.TotalDeaths + p.TotalAssists / 3;
@@ -40,8 +83,8 @@ const MatchResult = ({ result }) => {
     getMedalCount(p.MedalAwards, 'Perfect Kill')
   );
 
-  const isBestAssists = (playerStats, p) => (
-    maxBy(playerStats, 'TotalAssists').Player.Gamertag.toLowerCase() === p.Player.Gamertag.toLowerCase()
+  const isBest = (attr, player) => (
+    best[attr] === player[attr] && <Triangle bright className={styles.best} />
   );
 
   const isCurrentGamer = p => (
@@ -95,19 +138,40 @@ const MatchResult = ({ result }) => {
             </tr>
             <tr onClick={() => toggleMore(i)} className={rowStyles(player, i)}>
               {/* <td>{player.Player.Gamertag}</td> */}
-              <td>{player.PlayerScore}</td>
-              <td>{player.TotalKills}</td>
-              <td>{player.TotalDeaths}</td>
-              <td className={cn({
-                [styles.best]: isBestAssists(result.PlayerStats, player),
-              })}>{player.TotalAssists}</td>
+              <td>
+                {isBest('PlayerScore', player)}
+                {player.PlayerScore}
+              </td>
+              <td>
+                {isBest('TotalKills', player)}
+                {player.TotalKills}
+              </td>
+              <td>
+                {isBest('TotalDeaths', player)}
+                {player.TotalDeaths}
+              </td>
+              <td>
+                {isBest('TotalAssists', player)}
+                {player.TotalAssists}
+              </td>
               <td className={styles.colDark}>{calcKda(player)}</td>
               <td className={styles.colDark}>{calcAccuracy(player)}</td>
-              <td className={styles.colDark}>{calcDamage(player)}</td>
-              <td className={styles.colDarker}>{player.TotalHeadshots}</td>
+              <td className={cn(styles.colDark, {
+                // [styles.best]: isBest('TotalDamageDealt', player),
+              })}>{calcDamage(player)}</td>
+              <td className={styles.colDark}>
+                {isBest('TotalHeadshots', player)}
+                {player.TotalHeadshots}
+              </td>
               <td className={styles.colDarker}>{calcPerfectKills(player)}</td>
-              <td className={styles.colDarker}>{player.TotalGrenadeKills}</td>
-              <td className={styles.colDarker}>{parseInt(player.TotalGrenadeDamage)}</td>
+              <td className={styles.colDarker}>
+                {isBest('TotalGrenadeKills', player)}
+                {player.TotalGrenadeKills}
+              </td>
+              <td className={styles.colDarker}>
+                {isBest('TotalGrenadeDamage', player)}
+                {parseInt(player.TotalGrenadeDamage)}
+              </td>
               <td className={styles.colDarker}>{calcTotalDamage(player)}</td>
             </tr>
             {more.includes(i) && <><tr className={rowStyles(player, i)}>
