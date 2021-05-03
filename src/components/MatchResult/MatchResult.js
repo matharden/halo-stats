@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import cn from 'classnames';
-import { filter, maxBy, minBy, sortBy } from 'lodash';
+import { filter, isEmpty, maxBy, minBy, sortBy } from 'lodash';
 import { useParams } from 'react-router-dom';
 
 import Medal from 'components/Medal';
@@ -13,32 +13,37 @@ import styles from './MatchResult.module.css';
 const attributes = [
   'PlayerScore',
   'TotalAssists',
-  // 'TotalDamageDealt',
   'TotalDeaths',
   'TotalGrenadeDamage',
   'TotalGrenadeKills',
   'TotalHeadshots',
   'TotalKills',
+  '_accuracy',
+  '_damage',
+  '_kda',
+  '_perfectKills',
+  '_totalDamage',
 ];
 const bestIsLow = ['TotalDeaths'];
 
 const MatchResult = ({ result }) => {
   const [more, setMore] = useState([]);
   const [best, setBest] = useState({});
+  const [augmentedStats, setAugmentedStats] = useState({});
   const { player: gamertag } = useParams();
 
-  const setBestAttributes = useCallback((result) => {
+  const setBestAttributes = useCallback((stats) => {
     // Get best score of each attribute.
     // Only add to the object if there is a single best score.
     setBest(attributes.reduce((scores, attr) => {
       let best;
       if (bestIsLow.includes(attr)) {
-        best = minBy(result.PlayerStats, attr)[attr];
+        best = minBy(stats, attr)[attr];
       } else {
-        best = maxBy(result.PlayerStats, attr)[attr];
+        best = maxBy(stats, attr)[attr];
       }
       // Find any players which match the best result.
-      const count = filter(result.PlayerStats, {[attr]: best}).length;
+      const count = filter(stats, {[attr]: best}).length;
       // Only set best unique player.
       if (count === 1) {
         return {
@@ -52,8 +57,21 @@ const MatchResult = ({ result }) => {
   }, []);
 
   useEffect(() => {
-    setBestAttributes(result);
-  }, [result, setBestAttributes]);
+    setAugmentedStats(() => (
+      result.PlayerStats.map(player => ({
+        ...player,
+        _accuracy: calcAccuracy(player),
+        _damage: calcDamage(player),
+        _kda: calcKda(player),
+        _perfectKills: calcPerfectKills(player),
+        _totalDamage: calcTotalDamage(player),
+      }))
+    ));
+  }, [result]);
+
+  useEffect(() => {
+    !isEmpty(augmentedStats) && setBestAttributes(augmentedStats);
+  }, [augmentedStats, setBestAttributes]);
 
   const calcKda = p => {
     const num = p.TotalKills - p.TotalDeaths + p.TotalAssists / 3;
@@ -127,7 +145,7 @@ const MatchResult = ({ result }) => {
         </tr>
       </thead>
       <tbody>
-        {sortBy(result.PlayerStats, 'Rank').map((player, i) => (
+        {sortBy(augmentedStats, 'Rank').map((player, i) => (
           <React.Fragment key={i}>
             <tr className={rowStyles(player, i)}>
               <th colSpan="4" onClick={() => toggleMore(i)}>
@@ -154,16 +172,26 @@ const MatchResult = ({ result }) => {
                 {isBest('TotalAssists', player)}
                 {player.TotalAssists}
               </td>
-              <td className={styles.colDark}>{calcKda(player)}</td>
-              <td className={styles.colDark}>{calcAccuracy(player)}</td>
-              <td className={cn(styles.colDark, {
-                // [styles.best]: isBest('TotalDamageDealt', player),
-              })}>{calcDamage(player)}</td>
+              <td className={styles.colDark}>
+                {isBest('_kda', player)}
+                {calcKda(player)}
+              </td>
+              <td className={styles.colDark}>
+                {isBest('_accuracy', player)}
+                {calcAccuracy(player)}
+              </td>
+              <td className={styles.colDark}>
+                {isBest('_damage', player)}
+                {calcDamage(player)}
+              </td>
               <td className={styles.colDark}>
                 {isBest('TotalHeadshots', player)}
                 {player.TotalHeadshots}
               </td>
-              <td className={styles.colDarker}>{calcPerfectKills(player)}</td>
+              <td className={styles.colDarker}>
+                {isBest('_perfectKills', player)}
+                {calcPerfectKills(player)}
+              </td>
               <td className={styles.colDarker}>
                 {isBest('TotalGrenadeKills', player)}
                 {player.TotalGrenadeKills}
@@ -172,7 +200,10 @@ const MatchResult = ({ result }) => {
                 {isBest('TotalGrenadeDamage', player)}
                 {parseInt(player.TotalGrenadeDamage)}
               </td>
-              <td className={styles.colDarker}>{calcTotalDamage(player)}</td>
+              <td className={styles.colDarker}>
+                {isBest('_totalDamage', player)}
+                {calcTotalDamage(player)}
+              </td>
             </tr>
             {more.includes(i) && <><tr className={rowStyles(player, i)}>
               <td colSpan="12" className={styles.colDark}>
