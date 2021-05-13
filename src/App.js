@@ -7,6 +7,7 @@ import cn from 'classnames';
 
 import Chevron from 'components/Chevron';
 import MatchResult from 'components/MatchResult';
+import useLocalStorage from 'hooks/useLocalStorage';
 // import maps from './maps'
 import styles from './App.module.css';
 
@@ -28,7 +29,7 @@ function App() {
   const [games, setGames] = useState([]);
   const [page, setPage] = useState(0);
   const { player } = useParams();
-  const [gamertag, setGamertag] = useState('');
+  const [gamertag, setGamertag] = useLocalStorage('gamertag');
   const [loading, setLoading] = useState(false);
   const history = useHistory();
 
