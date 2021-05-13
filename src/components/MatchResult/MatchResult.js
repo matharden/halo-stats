@@ -70,7 +70,9 @@ const MatchResult = ({ result }) => {
   }, [result]);
 
   useEffect(() => {
-    !isEmpty(augmentedStats) && setBestAttributes(augmentedStats);
+    !isEmpty(augmentedStats) && setBestAttributes(augmentedStats.filter(
+      player => !player.DNF
+    ));
   }, [augmentedStats, setBestAttributes]);
 
   const calcKda = p => {
