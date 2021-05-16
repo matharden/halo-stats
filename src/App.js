@@ -36,7 +36,9 @@ function App() {
   useEffect(() => {
     async function fetchData() {
       const gamesSet = await playerMatchHistory(player, page);
-      setGames(games => games.concat(gamesSet));
+      if (!isEmpty(gamesSet)) {
+        setGames(games => games.concat(gamesSet));
+      }
       setLoading(false);
     }
     setLoading(true);
