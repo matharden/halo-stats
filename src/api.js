@@ -16,9 +16,9 @@ export const playerMatchHistory = (player, page, count=10) => {
       "Ocp-Apim-Subscription-Key": primary_key,
     }
   };
-  return fetch(url, headers).then(response => response.json()).then(data => {
-    return data.Results;
-  });
+  return fetch(url, headers).then(response => response.json()).then(data => (
+    data.Results
+  )).catch(error => console.log('API fetch error',error));
 };
 
 export const matchResult = matchId => {
