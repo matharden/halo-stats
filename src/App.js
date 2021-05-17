@@ -28,6 +28,7 @@ const displayDate = date => {
 function App() {
   const [games, setGames] = useState([]);
   const [page, setPage] = useState(0);
+  const [onlyme, setOnlyme] = useState(false);
   const { player } = useParams();
   const [gamertag, setGamertag] = useLocalStorage('gamertag');
   const [loading, setLoading] = useState(false);
@@ -121,6 +122,7 @@ function App() {
         }}
       />}
       {player && !loading && !games.length && <p>No matches found.</p>}
+      <div><label htmlFor="onlyme">Show only me</label> <input type="checkbox" id="onlyme" checked={onlyme} onChange={e => setOnlyme(e.target.checked)} /></div>
       {!!games.length && <>
         <ol className={styles.match}>
           {games.map((game, key) => (
@@ -155,7 +157,12 @@ function App() {
                 spin={game.showResult && isEmpty(game.result)}
               />
               </div>
-              {game.showResult && <MatchResult result={game.result} />}
+              {game.showResult &&
+                <MatchResult
+                  result={game.result}
+                  onlyme={onlyme}
+                />
+              }
               <hr />
             </li>
           ))}

@@ -87,6 +87,14 @@
 
 /* blue 2 darlk #0c1c29 */
 
+.onlyme tbody tr {
+  display: none;
+}
+
+.onlyme tbody .currentGamer {
+  display: table-row;
+}
+
 tbody .currentGamer th,
 tbody .currentGamer td {
   font-weight: 700;

@@ -26,7 +26,7 @@ const attributes = [
 ];
 const bestIsLow = ['TotalDeaths'];
 
-const MatchResult = ({ result }) => {
+const MatchResult = ({ onlyme, result }) => {
   const [more, setMore] = useState([]);
   const [best, setBest] = useState({});
   const [augmentedStats, setAugmentedStats] = useState({});
@@ -128,7 +128,9 @@ const MatchResult = ({ result }) => {
   };
 
   return (
-    <table className={styles.table}>
+    <table className={cn(styles.table, {
+      [styles.onlyme]: onlyme,
+    })}>
       <thead>
         <tr>
           {/* <th>Spartan</th> */}
