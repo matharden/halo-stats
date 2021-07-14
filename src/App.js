@@ -86,10 +86,10 @@ function App() {
     }
   };
 
-  const submit = (event) => {
+  const submit = event => {
     event.preventDefault();
     history.push({
-      pathname: `${gamertag}`,
+      pathname: `/${gamertag}`,
     });
   };
 

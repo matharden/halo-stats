@@ -1,17 +1,24 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { Router, Route, Switch } from 'react-router-dom';
+import { createBrowserHistory } from 'history';
+import ReactGA from 'react-ga';
 import './index.css';
 import App from './App';
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import reportWebVitals from './reportWebVitals';
 
+const history = createBrowserHistory();
+
+ReactGA.initialize('UA-7274649-2');
+history.listen(({ pathname }) => ReactGA.pageview(pathname));
+
 ReactDOM.render(
   <React.StrictMode>
-    <Router>
+    <Router history={history}>
       <Switch>
+        <Route exact path="/" component={App} />
         <Route path="/:player" component={App} />
-        <Route path="/" component={App} />
       </Switch>
     </Router>
   </React.StrictMode>,
