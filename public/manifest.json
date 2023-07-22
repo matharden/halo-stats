@@ -8,14 +8,14 @@
       "type": "image/x-icon"
     },
     {
-      "src": "halo192.png",
+      "src": "halo5-192.png",
       "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "halo512.png",
+      "src": "halo5-256.png",
       "type": "image/png",
-      "sizes": "512x512"
+      "sizes": "256x256"
     }
   ],
   "start_url": ".",
