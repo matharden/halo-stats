@@ -33,6 +33,18 @@ export const matchResult = matchId => {
     .then(data => data);
 };
 
+export const mapVariant = mapId => {
+  const url = `https://www.haloapi.com/metadata/h5/metadata/map-variants/${mapId}`;
+  const headers = {
+    headers: {
+      "Ocp-Apim-Subscription-Key": primary_key,
+    }
+  };
+  return fetch(url, headers)
+    .then(response => response.json())
+    .then(data => data);
+};
+
 // CORS error on this.
 export const playerEmblemImage = gamertag => {
   const url = `https://www.haloapi.com/profile/h5/profiles/${gamertag}/emblem`;

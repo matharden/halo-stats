@@ -58,8 +58,10 @@ function App() {
   }, [page, player]);
 
   const toggleMatch = id => {
+    const mygame = find(games, {'Id':{'MatchId':id}});
     async function fetchData(matchId) {
       const result = await matchResult(matchId);
+      // const mapVariant = await fetchMapVariant(mygame.MapVariant.ResourceId);
       // Push the result into the game object.
       setGames(games => games.map(game => {
         const match = game.Id.MatchId;
@@ -67,6 +69,8 @@ function App() {
           return {
             ...game,
             result,
+            // mapName: mapVariant.name,
+            // mapImage: mapVariant.mapImageUrl,
             showResult: true,
           }
         } else {
@@ -88,7 +92,6 @@ function App() {
       }));
     };
     // Check.
-    const mygame = find(games, {'Id':{'MatchId':id}});
     if (mygame.showResult) {
       flipResult(false);
     } else {
