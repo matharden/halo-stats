@@ -5,6 +5,7 @@ import { find, isEmpty, sortBy } from 'lodash';
 import { useHistory, useParams } from 'react-router-dom';
 import cn from 'classnames';
 
+import { getMapVariantById } from 'lookups';
 import Chevron from 'components/Chevron';
 import MatchResult from 'components/MatchResult';
 import useLocalStorage from 'hooks/useLocalStorage';
@@ -36,7 +37,20 @@ function App() {
   useEffect(() => {
     async function fetchData() {
       const gamesSet = await playerMatchHistory(player, page);
-      setGames(games => games.concat(gamesSet));
+      // Augment the game data with map variant from static lookup.
+      setGames(games => games.concat(gamesSet.map(game => {
+        const mapVariant = getMapVariantById(game.MapVariant.ResourceId);
+        if (mapVariant) {
+          return {
+            ...game,
+            mapName: mapVariant.name,
+            mapImage: mapVariant.mapImageUrl,
+          }
+        } else {
+          console.log("No map variant found", game.MapVariant.ResourceId);
+          return game;
+        }
+      })));
       setLoading(false);
     }
     setLoading(true);
@@ -133,6 +147,10 @@ function App() {
                 <div>
                   <dt>Date</dt>
                   <dd>{displayDate(game.MatchCompletedDate.ISO8601Date)}</dd>
+                </div>
+                <div>
+                  <dt>Map</dt>
+                  <dd><a href={game.mapImage} target="map">{game.mapName}</a></dd>
                 </div>
                 <div>
                   <dt>Result</dt>

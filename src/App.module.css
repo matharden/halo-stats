@@ -16,6 +16,11 @@ hr {
   height: 1px;
 }
 
+a {
+  color: #fff;
+  text-decoration: underline;
+}
+
 .input {
   background: rgba(0, 0, 0, 0.2);
   background: #071414;
