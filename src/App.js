@@ -182,6 +182,7 @@ function App() {
           </button>
         </div>
       </>}
+      Non-app
     </div>
   );
 };
